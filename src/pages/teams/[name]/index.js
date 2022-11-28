@@ -75,8 +75,8 @@ export async function getServerSideProps(context) {
 
   const { name } = context.params
 
-  const teamId = cookies.get(name)
-  if (!teamId) {
+  const teams = cookies.get('teams')
+  if (!teams[name]) {
     return {
       redirect: {
         destination: '/teams',
@@ -86,6 +86,6 @@ export async function getServerSideProps(context) {
   }
 
   return {
-    props: { userId, teamId }
+    props: { userId, teamId: teams[name] }
   }
 }
