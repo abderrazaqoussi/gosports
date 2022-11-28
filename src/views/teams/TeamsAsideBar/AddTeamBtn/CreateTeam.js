@@ -10,6 +10,8 @@ import { useMutation } from 'react-query'
 import { addTeam } from 'src/utils/api/apisConfig'
 import { useRouter } from 'next/router'
 import { useQueryClient } from 'react-query'
+import { useCookie } from 'next-cookie'
+import unifyingText from 'src/utils/strings/unifyingText'
 
 export default function CreateTeam({ handleClose }) {
   const addNewTeam = useMutation(addTeam)
@@ -17,6 +19,7 @@ export default function CreateTeam({ handleClose }) {
   const [name, setName] = useState(null)
   const { data: userId } = useUserId()
   const queryClient = useQueryClient()
+  const cookies = useCookie()
   const router = useRouter()
   const handleFileChange = e => {
     const img = {
@@ -35,7 +38,11 @@ export default function CreateTeam({ handleClose }) {
     addNewTeam.mutate(teamData, {
       onSuccess: (data, error, variables, context) => {
         queryClient.setQueryData('teams', data)
-        router.push(`teams/${name.replace(/\s+/g, '')}`)
+        // console.log(data)
+        let teams = cookies.get('teams')
+        teams[unifyingText(data.data.name)] = data.data._id
+        cookies.set(`teams`, JSON.stringify(teams))
+        router.push(`teams/${unifyingText(data.data.name)}`)
       }
     })
   }

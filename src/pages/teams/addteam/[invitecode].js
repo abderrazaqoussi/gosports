@@ -24,7 +24,7 @@ export async function getServerSideProps(context) {
   const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/v1/teams/${invitecode}`)
   const data = await res.json()
 
-  if (!data.team.length) {
+  if (!data?.team.length) {
     return {
       redirect: {
         destination: '/teams',

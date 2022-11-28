@@ -7,11 +7,15 @@ import PencilIcon from 'public/icons/PencilIcon'
 import { updateTeamName } from 'src/utils/api/apisConfig'
 import { useMutation } from 'react-query'
 import { useRouter } from 'next/router'
+import { useCookie } from 'next-cookie'
+import unifyingText from 'src/utils/strings/unifyingText'
 
 export default function TeamName({ teamId, teamName, editable }) {
   const [modifying, setModifying] = useState(false)
   const [grpNam, setGrpName] = useState(teamName ? teamName : 'unTitled')
   const router = useRouter()
+  const cookies = useCookie()
+
   const updateName = useMutation(data => {
     updateTeamName(teamId, data)
   })
@@ -22,8 +26,20 @@ export default function TeamName({ teamId, teamName, editable }) {
     updateName.mutate(
       { name: grpNam },
       {
-        onSuccess: (data, error, variables, context) => {
-          router.push(`teams/${grpNam.replace(/\s+/g, '').toLowerCase()}`)
+        onSuccess: async (data, error, variables, context) => {
+          let teams = cookies.get('teams')
+          let oldTeamName
+          Object.keys(teams).forEach(element => {
+            if (teams[element] === teamId) {
+              oldTeamName = element
+            }
+          })
+          delete teams[oldTeamName]
+          teams[unifyingText(grpNam)] = teamId
+          cookies.set(`teams`, JSON.stringify(teams))
+          setTimeout(() => {
+            return router.push(`teams/${unifyingText(grpNam)}`)
+          }, 200)
         }
       }
     )

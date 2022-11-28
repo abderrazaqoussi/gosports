@@ -48,6 +48,7 @@ export default function TeamMembers({ team }) {
     },
     cardStyle: {
       width: '100%',
+      height: '50px',
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
@@ -66,8 +67,23 @@ export default function TeamMembers({ team }) {
         {usersData.map(userData => {
           return (
             <Box key={usersData.indexOf(userData)} sx={style.cardStyle}>
-              <Avatar src={userData?.data?.data.image} alt='Remy Sharp' referrerPolicy='no-referrer' />
-              <Typography>{userData?.data?.data.name}</Typography>
+              <Avatar
+                src={userData?.data?.data.image}
+                alt='Remy Sharp'
+                referrerPolicy='no-referrer'
+                sx={{ maxWidth: '40px', maxHeight: '40px' }}
+              />
+              <div
+                style={{
+                  display: 'grid',
+                  placeItems: 'center',
+                  maxWidth: '60%',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                }}
+              >
+                {userData?.data?.data.name}
+              </div>
               <Box
                 sx={{
                   marginLeft: 'auto',
@@ -123,11 +139,11 @@ export default function TeamMembers({ team }) {
                               handleClose()
                             }}
                           >
-                            {/* {team.members.find(e => e.id === userData?.data?.data._id)?.role === 'athlete' ? (
+                            {team.members.find(e => e.id === userData?.data?.data._id)?.role === 'athlete' ? (
                               <>Promote</>
                             ) : (
                               <>Demote</>
-                            )} */}
+                            )}
                           </MenuItem>
                           <MenuItem onClick={handleClose}>Remove</MenuItem>
                         </>

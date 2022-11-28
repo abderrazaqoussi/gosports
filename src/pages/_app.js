@@ -13,6 +13,7 @@ import { SettingsConsumer, SettingsProvider } from 'src/@core/context/settingsCo
 
 // **
 import { QueryClient, QueryClientProvider } from 'react-query'
+import { ReactQueryDevtools } from 'react-query/devtools'
 
 // ** Configure JSS & ClassName
 export default function App({ Component, pageProps }) {
@@ -30,6 +31,7 @@ export default function App({ Component, pageProps }) {
         <meta name='referrer' content='no-referrer' />
       </Head>
       <QueryClientProvider client={queryClient}>
+        <ReactQueryDevtools initialIsOpen={false} />
         <SettingsProvider>
           <SettingsConsumer>
             {({ settings }) => {

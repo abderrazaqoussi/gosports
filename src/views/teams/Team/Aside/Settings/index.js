@@ -19,7 +19,12 @@ export default function Settings({ team }) {
       <TeamName
         teamName={team?.name}
         teamId={team?._id}
-        editable={team.members.find(e => e.id === myId)?.role === ('owner' || 'coach') ? true : false}
+        editable={
+          team.members.find(e => e.id === myId)?.role === 'owner' ||
+          team.members.find(e => e.id === myId)?.role === 'coach'
+            ? true
+            : false
+        }
       />
       <TeamAddLink link={team?.inviteCode} teamId={team?._id} />
       <ExitTeam teamId={team?._id} />

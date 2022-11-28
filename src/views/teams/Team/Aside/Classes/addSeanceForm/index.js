@@ -1,8 +1,6 @@
 // ** React Imports
 import { useEffect, useState } from 'react'
 
-import { v4 as uuid } from 'uuid'
-
 import SeanceForm from './SeanceForm'
 
 import CreateTask from './TaskForm'
@@ -14,9 +12,8 @@ import Button from '@mui/material/Button'
 import CardHeader from '@mui/material/CardHeader'
 import CardActions from '@mui/material/CardActions'
 
-export default function Createseance({ setMain }) {
+export default function Index({ setMain }) {
   const [seanceData, setSeanceData] = useState({
-    id: uuid(),
     title: '',
     sport: '',
     athletes: [],
@@ -39,7 +36,7 @@ export default function Createseance({ setMain }) {
           {seanceData.tasks.length ? (
             seanceData.tasks.map(e => {
               return (
-                <Grid key={e.id} item xs={12} sx={{ boxShadow: 'none' }}>
+                <Grid item xs={12} sx={{ boxShadow: 'none' }}>
                   <Card>
                     <CardHeader
                       title='Task Details'
