@@ -20,8 +20,8 @@ import parseJwt from 'src/utils/cookies/parseJwt'
 
 export default function index({ userId, teamId }) {
   const [thisTeam, setThisTeam] = useState(null)
-  const { data, error, isLoading } = useQuery(['Teams', userId], () => getTeamsByID(userId))
-  console.log({ userId, teamId })
+  const { data, error, isLoading, isSuccess, isError } = useQuery(['Teams', userId], () => getTeamsByID(userId))
+
   useEffect(() => {
     data?.data.forEach(e => {
       if (e._id === teamId) {
@@ -46,17 +46,21 @@ export default function index({ userId, teamId }) {
     }
   }
 
-  return (
-    <Box sx={style.containerStyle}>
-      <TeamsAsideBar teams={data?.data} />
-      <Box sx={style.sectionStyle}>
-        <Aside team={thisTeam} />
-        <Box sx={{ display: { xs: 'none', md: 'flex' }, width: '100%' }}>
-          <Main team={thisTeam} />
+  if (isLoading) {
+    return <>{'Loading'}</>
+  } else if (isSuccess) {
+    return (
+      <Box sx={style.containerStyle}>
+        <TeamsAsideBar teams={data?.data} />
+        <Box sx={style.sectionStyle}>
+          <Aside team={thisTeam} />
+          <Box sx={{ display: { xs: 'none', md: 'flex' }, width: '100%' }}>
+            <Main team={thisTeam} />
+          </Box>
         </Box>
       </Box>
-    </Box>
-  )
+    )
+  }
 }
 
 export async function getServerSideProps(context) {

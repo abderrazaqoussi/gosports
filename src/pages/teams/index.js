@@ -13,17 +13,16 @@ import { getTeamsByID } from 'src/utils/api/apisConfig'
 
 export default function Groups({ userId }) {
   const theme = useTheme()
-  const { data, error, isLoading } = useQuery(['Teams', userId], () => getTeamsByID(userId), {
-    onSuccess: data => {
-      data?.data.forEach(e => {
-        // cookies.set(`${e?.name.replace(/\s+/g, '').toLowerCase()}`, e?._id)
-      })
-    }
-  })
+  const { data, error, isLoading, isSuccess, isError } = useQuery(['Teams', userId], () => getTeamsByID(userId))
 
   return (
     <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' } }}>
-      <AsideNavBar teams={data?.data} userId={userId} />
+      <AsideNavBar
+        teams={isSuccess ? data.data : null}
+        error={isError ? error : null}
+        isLoading={isLoading}
+        userId={userId}
+      />
       <Box
         sx={{
           width: '100%',
@@ -40,13 +39,23 @@ export default function Groups({ userId }) {
           }
         }}
       >
-        <TeamsBG />
-        <Box sx={{ width: '50%', textAlign: 'center' }}>
-          <Box sx={{ fontSize: '2rem', fontWeight: 600, color: theme.palette.text.default }}>Go Sports</Box>
-          <Box sx={{ fontSize: '.9rem', color: theme.palette.text.primary }}>
-            Join a team and get your next class, take the class and get review from your coach and teammates.
-          </Box>
-        </Box>
+        {!isSuccess || (isSuccess && data.data) ? (
+          <>
+            <TeamsBG />
+            <Box sx={{ width: '50%', textAlign: 'center' }}>
+              <Box sx={{ fontSize: '2rem', fontWeight: 600, color: theme.palette.text.default }}>Go Sports</Box>
+              <Box sx={{ fontSize: '.9rem', color: theme.palette.text.primary }}>
+                Discover your teams and get your next class, take the class and get review from your coach and
+                teammates.
+              </Box>
+            </Box>
+          </>
+        ) : (
+          <div style={{ width: '60%', textAlign: 'center' }}>
+            You are not part of any team, try to create or join a team and get your next class, take the class and get
+            review from your coach and teammates.
+          </div>
+        )}
       </Box>
     </Box>
   )

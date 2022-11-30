@@ -29,6 +29,7 @@ export default function CreateTeam({ handleClose }) {
     setImgSrc(img)
   }
   const handleSubmit = async e => {
+    console.log(name)
     e.preventDefault()
     let teamData = new FormData()
     teamData.append('name', name)
@@ -36,13 +37,18 @@ export default function CreateTeam({ handleClose }) {
     teamData.append('teamImage', imgSrc.data)
 
     addNewTeam.mutate(teamData, {
-      onSuccess: (data, error, variables, context) => {
+      onSuccess: (data, variables, context) => {
         queryClient.setQueryData('teams', data)
-        // console.log(data)
         let teams = cookies.get('teams')
+        if (!teams) {
+          teams = {}
+        }
         teams[unifyingText(data.data.name)] = data.data._id
         cookies.set(`teams`, JSON.stringify(teams))
-        router.push(`teams/${unifyingText(data.data.name)}`)
+        router.replace(`${router.basePath}/teams/${unifyingText(data.data.name)}`)
+      },
+      onError: (error, variables, context) => {
+        console.log({ error, variables, context })
       }
     })
   }
@@ -72,7 +78,11 @@ export default function CreateTeam({ handleClose }) {
       >
         <input hidden accept='image/*' type='file' onChange={handleFileChange} />
         {imgSrc ? (
-          <img src={`${imgSrc.preview}`} alt='random image' width='100px' height='100px' />
+          <img
+            src={`${imgSrc.preview}`}
+            alt='random image'
+            style={{ width: '100px', height: '100px', objectFit: 'cover' }}
+          />
         ) : (
           <Box sx={{ display: 'grid', placeItems: 'center' }}>
             <CameraIcon />
@@ -92,6 +102,7 @@ export default function CreateTeam({ handleClose }) {
           setName(e.target.value)
         }}
       />
+      {/* {addNewTeam.isError ? <div>{addNewTeam.error}</div> : null} */}
       <Box
         sx={{
           width: '100%',

@@ -35,11 +35,13 @@ export async function getServerSideProps(context) {
   if (!teams) {
     const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/v1/teams/user/${userId}`)
     const data = await res.json()
-    teams = {}
-    data.data.map(e => {
-      teams[unifyingText(e.name)] = e._id
-    })
-    cookies.set(`teams`, JSON.stringify(teams))
+    if (data.status === 'Success') {
+      teams = {}
+      data.data.map(e => {
+        teams[unifyingText(e.name)] = e._id
+      })
+      cookies.set(`teams`, JSON.stringify(teams))
+    }
   }
 
   return {

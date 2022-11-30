@@ -15,8 +15,11 @@ import converToImage from 'src/utils/images/converBufferToImage'
 import DraggableBox from 'src/components/DraggableBox'
 import AddTeamBtn from './AddTeamBtn'
 import NoImage from 'public/icons/NoImage'
+import Loader from 'public/Loader'
+import unifyingText from 'src/utils/strings/unifyingText'
 
-export default function Index({ teams }) {
+export default function Index({ teams, isLoading }) {
+  let iconSize = 48
   // Use Hooks
   const mediumScreen = useMediaQuery(theme => theme.breakpoints.down('md'))
   const theme = useTheme()
@@ -25,7 +28,7 @@ export default function Index({ teams }) {
 
   // use Methodes
   const handlePickedTeam = (id, name) => {
-    return router.push(`/teams/${name.replace(/\s+/g, '').toLowerCase()}`)
+    return router.replace(`${router.basePath}/teams/${unifyingText(name)}`)
   }
 
   // use Style
@@ -46,11 +49,11 @@ export default function Index({ teams }) {
       overflow: 'hidden'
     },
     cardStyle: {
-      minWidth: '46px',
-      height: `46px`,
-      minHeight: '46px',
+      minWidth: `${iconSize}px`,
+      minHeight: `${iconSize}px`,
+      maxWidth: `${iconSize}px`,
+      maxHeight: `${iconSize}px`,
       overflow: 'hidden',
-      margin: 0,
       display: 'grid',
       placeItems: 'center',
       borderRadius: '50%',
@@ -58,6 +61,16 @@ export default function Index({ teams }) {
       outline: '2px solid #234',
       cursor: 'pointer',
       position: 'relative'
+    },
+    buttonStyle: {
+      minWidth: `${iconSize}px`,
+      minHeight: `${iconSize}px`,
+      maxWidth: `${iconSize}px`,
+      maxHeight: `${iconSize}px`,
+      display: 'grid',
+      placeItems: 'center',
+      margin: 0,
+      padding: 0
     },
     itemsBox: {
       padding: { xs: '1rem 1.25rem', md: '.25rem .5rem' },
@@ -70,28 +83,47 @@ export default function Index({ teams }) {
   return (
     <Box sx={style.asideStyle} component={'aside'}>
       <AddTeamBtn />
-      <DraggableBox orientation={mediumScreen ? 'horizontal' : 'vertical'}>
-        <Box sx={style.itemsBox}>
-          {teams?.map(team => {
-            return (
-              <Button
-                key={team._id}
-                onClick={() => {
-                  handlePickedTeam(team._id, team.name)
-                }}
-              >
-                <Box className='child' sx={style.cardStyle}>
-                  {team.teamImage ? (
-                    <Image alt='test avatar' src={converToImage(team?.teamImage)} layout='fill' />
-                  ) : (
-                    <NoImage />
-                  )}
+      {isLoading ? (
+        <div
+          style={{
+            width: mediumScreen ? '100vw' : '80px',
+            height: mediumScreen ? '70px' : '100vh',
+            display: 'grid',
+            placeItems: 'center'
+          }}
+        >
+          <Loader />
+        </div>
+      ) : (
+        <DraggableBox orientation={mediumScreen ? 'horizontal' : 'vertical'}>
+          <Box sx={style.itemsBox}>
+            {teams?.map(team => {
+              return (
+                <Box key={team._id} className='child' sx={style.cardStyle}>
+                  <Button
+                    onClick={() => {
+                      handlePickedTeam(team._id, team.name)
+                    }}
+                    sx={style.buttonStyle}
+                  >
+                    {team.teamImage ? (
+                      <Image
+                        src={converToImage(team?.teamImage)}
+                        alt={`${team.name} Team Picture`}
+                        layout='fill'
+                        objectFit='cover'
+                        quality={100}
+                      />
+                    ) : (
+                      <NoImage />
+                    )}
+                  </Button>
                 </Box>
-              </Button>
-            )
-          })}
-        </Box>
-      </DraggableBox>
+              )
+            })}
+          </Box>
+        </DraggableBox>
+      )}
     </Box>
   )
 }

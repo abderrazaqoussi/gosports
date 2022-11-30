@@ -65,95 +65,93 @@ export default function TeamMembers({ team }) {
     <Box sx={style.containerStyle}>
       <Box sx={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
         {usersData.map(userData => {
-          return (
-            <Box key={usersData.indexOf(userData)} sx={style.cardStyle}>
-              <Avatar
-                src={userData?.data?.data.image}
-                alt='Remy Sharp'
-                referrerPolicy='no-referrer'
-                sx={{ maxWidth: '40px', maxHeight: '40px' }}
-              />
-              <div
-                style={{
-                  display: 'grid',
-                  placeItems: 'center',
-                  maxWidth: '60%',
-                  textOverflow: 'ellipsis',
-                  whiteSpace: 'nowrap'
-                }}
-              >
-                {userData?.data?.data.name}
-              </div>
-              <Box
-                sx={{
-                  marginLeft: 'auto',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  gap: '10px'
-                }}
-              >
-                <Typography
-                  sx={{
-                    // background: `${colorTransparency('#f4a261', 10)}`,
-                    color: '#f4a261',
-                    padding: '.25rem .5rem',
-                    fontSize: '.9rem',
-                    borderRadius: '15px'
+          if (userData.isSuccess) {
+            return (
+              <Box key={usersData.indexOf(userData)} sx={style.cardStyle}>
+                <Avatar
+                  src={userData.data.data.image}
+                  alt='Remy Sharp'
+                  referrerPolicy='no-referrer'
+                  sx={{ maxWidth: '40px', maxHeight: '40px' }}
+                />
+                <div
+                  style={{
+                    display: 'grid',
+                    placeItems: 'center',
+                    maxWidth: '60%',
+                    textOverflow: 'ellipsis',
+                    whiteSpace: 'nowrap'
                   }}
                 >
-                  {userData.data
-                    ? capitalizeFirstLetter(team.members.find(e => e.id === userData?.data?.data._id)?.role)
-                    : ''}
-                </Typography>
-                {team.members.find(e => e.id === myId)?.role === 'owner' ||
-                team.members.find(e => e.id === myId)?.role === 'coach' ? (
-                  <Box>
-                    <IconButton
-                      id='basic-button'
-                      aria-controls={open ? 'basic-menu' : undefined}
-                      aria-haspopup='true'
-                      aria-expanded={open ? 'true' : undefined}
-                      onClick={handleClick}
-                    >
-                      <MoreIcon />
-                    </IconButton>
-                    <Menu
-                      id='basic-menu'
-                      anchorEl={anchorEl}
-                      open={open}
-                      onClose={handleClose}
-                      sx={{
-                        '& .MuiMenu-paper': {
-                          boxShadow: 'none',
-                          border: '1px solid #edf2f4'
-                        }
-                      }}
-                    >
-                      {team.members.find(e => e.id === userData?.data?.data._id)?.role === 'owner' ? null : (
-                        <>
+                  {userData.data.data.name}
+                </div>
+                <Box
+                  sx={{
+                    marginLeft: 'auto',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '10px'
+                  }}
+                >
+                  <Typography
+                    sx={{
+                      color: '#f4a261',
+                      padding: '.25rem .5rem',
+                      fontSize: '.9rem',
+                      borderRadius: '15px'
+                    }}
+                  >
+                    {userData.data
+                      ? capitalizeFirstLetter(team.members.find(e => e.id === userData.data.data._id).role)
+                      : ''}
+                  </Typography>
+                  {team.members.find(e => e.id === myId).role === 'owner' ||
+                  team.members.find(e => e.id === myId).role === 'coach' ? (
+                    <Box>
+                      <IconButton
+                        id='basic-button'
+                        aria-controls={open ? 'basic-menu' : undefined}
+                        aria-haspopup='true'
+                        aria-expanded={open ? 'true' : undefined}
+                        onClick={handleClick}
+                      >
+                        <MoreIcon />
+                      </IconButton>
+                      {team.members.find(e => e.id === userData.data.data._id).role === 'owner' ? null : (
+                        <Menu
+                          id='basic-menu'
+                          anchorEl={anchorEl}
+                          open={open}
+                          onClose={handleClose}
+                          sx={{
+                            '& .MuiMenu-paper': {
+                              boxShadow: 'none',
+                              border: '1px solid #edf2f4'
+                            }
+                          }}
+                        >
                           <MenuItem
                             onClick={() => {
-                              console.log(userData?.data?.data._id)
-                              updateRole.mutate(team._id, userData?.data?.data._id)
+                              console.log({ from: 'comp', teamId: team._id, userId: userData.data.data._id })
+
+                              updateRole.mutate({ teamId: team._id, userId: userData.data.data._id })
                               handleClose()
                             }}
                           >
-                            {team.members.find(e => e.id === userData?.data?.data._id)?.role === 'athlete' ? (
-                              <>Promote</>
-                            ) : (
-                              <>Demote</>
-                            )}
+                            {team.members.find(e => e.id === userData.data.data._id).role != 'coach'
+                              ? 'Promote'
+                              : 'Demote'}
                           </MenuItem>
                           <MenuItem onClick={handleClose}>Remove</MenuItem>
-                        </>
+                        </Menu>
                       )}
-                    </Menu>
-                  </Box>
-                ) : null}
+                    </Box>
+                  ) : null}
+                </Box>
               </Box>
-            </Box>
-          )
+            )
+          }
         })}
       </Box>
     </Box>

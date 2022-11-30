@@ -37,10 +37,10 @@ export const updateTeamName = (id, data) => {
     .catch(err => err)
 }
 
-export const updateUserRole = (teamId, userId) => {
-  console.log({ teamId, userId })
+export const updateUserRole = data => {
+  console.log({ teamId: data.teamId, userId: data.userId })
   return api
-    .put(`/api/v1/teams/${teamId}/user/${userId}`)
+    .put(`/api/v1/teams/${data.teamId}/user/${data.userId}`)
     .then(res => res.data)
     .catch(err => err)
 }
