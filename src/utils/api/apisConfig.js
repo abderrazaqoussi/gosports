@@ -57,6 +57,13 @@ export const RemoveUserFromTeam = data => {
     .catch(err => err)
 }
 
+export const addUserToPendingList = data => {
+  return api
+    .post(`/api/v1/teams/${data.teamId}/user/${data.userId}`)
+    .then(res => res.data)
+    .catch(err => err)
+}
+
 export const AcceptUserDemand = data => {
   console.log(data)
   return api

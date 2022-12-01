@@ -25,8 +25,7 @@ export default function PendingList({ list, teamId }) {
       display: 'flex',
       flexDirection: 'column',
       gap: '10px',
-      padding: '1.5rem 1.25rem',
-      borderTop: '1px solid #edf2f4'
+      padding: '1.5rem 1.25rem'
     },
     cardStyle: {
       width: '100%',

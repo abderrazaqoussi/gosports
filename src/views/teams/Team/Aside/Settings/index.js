@@ -6,8 +6,8 @@ import PendingList from './components/PendingList'
 import useUserId from 'src/utils/hooks/useUserId'
 
 export default function Settings({ team }) {
-  console.log(team)
   const { data: myId } = useUserId()
+
   return (
     <div
       style={{
