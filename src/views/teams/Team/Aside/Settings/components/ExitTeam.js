@@ -1,8 +1,15 @@
 import { useState } from 'react'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
+import { useMutation } from 'react-query'
+import { RemoveUserFromTeam } from 'src/utils/api/apisConfig'
+import useUserId from 'src/utils/hooks/useUserId'
+import { useRouter } from 'next/router'
 
 export default function ExitTeam({ teamId }) {
+  const router = useRouter()
+  const handleExitReq = useMutation(RemoveUserFromTeam)
+  const { data: userId } = useUserId()
   const containerStyle = {
     width: '90%',
     display: 'flex',
@@ -22,7 +29,21 @@ export default function ExitTeam({ teamId }) {
         please continue with caution.
       </Box>
       <Box sx={{ width: '100%', display: 'flex', justifyContent: 'end' }}>
-        <Button variant='contained' sx={{ background: '#e63946', '&:hover': { background: '#e63946', opacity: 0.9 } }}>
+        <Button
+          variant='contained'
+          sx={{ background: '#e63946', '&:hover': { background: '#e63946', opacity: 0.9 } }}
+          onClick={() => {
+            handleExitReq.mutate(
+              { teamId, userId },
+              {
+                onSuccess: (data, variables, context) => {
+                  // Boom baby!
+                  router.replace(`${router.basePath}/teams`)
+                }
+              }
+            )
+          }}
+        >
           Exit Group
         </Button>
       </Box>

@@ -102,7 +102,9 @@ export default function CreateTeam({ handleClose }) {
           setName(e.target.value)
         }}
       />
-      {/* {addNewTeam.isError ? <div>{addNewTeam.error}</div> : null} */}
+      {addNewTeam.isError ? (
+        <div style={{ color: 'red', fontSize: '.8rem' }}>{'Image size is more than 2 mb'}</div>
+      ) : null}
       <Box
         sx={{
           width: '100%',

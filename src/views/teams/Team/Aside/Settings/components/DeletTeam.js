@@ -3,12 +3,18 @@ import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import { deleteTeam } from 'src/utils/api/apisConfig'
 import { useRouter } from 'next/router'
+import { useMutation } from 'react-query'
 
 export default function DeletTeam({ teamId }) {
   const router = useRouter()
+  const handleDeleteTeam = useMutation(deleteTeam)
   const handelDeleteTeam = () => {
-    deleteTeam(teamId)
-    router.push('/teams')
+    handleDeleteTeam.mutate(teamId, {
+      onSuccess: (data, variables, context) => {
+        // Boom baby!
+        router.replace(`${router.basePath}/teams`)
+      }
+    })
   }
   const containerStyle = {
     width: '90%',

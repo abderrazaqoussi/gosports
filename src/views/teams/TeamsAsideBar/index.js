@@ -18,7 +18,7 @@ import NoImage from 'public/icons/NoImage'
 import Loader from 'public/Loader'
 import unifyingText from 'src/utils/strings/unifyingText'
 
-export default function Index({ teams, isLoading }) {
+export default function Index({ teams, isLoading, activeTeam }) {
   let iconSize = 48
   // Use Hooks
   const mediumScreen = useMediaQuery(theme => theme.breakpoints.down('md'))
@@ -99,7 +99,11 @@ export default function Index({ teams, isLoading }) {
           <Box sx={style.itemsBox}>
             {teams?.map(team => {
               return (
-                <Box key={team._id} className='child' sx={style.cardStyle}>
+                <Box
+                  key={team._id}
+                  className='child'
+                  sx={{ ...style.cardStyle, borderRadius: activeTeam && activeTeam === team._id ? '35%' : '50%' }}
+                >
                   <Button
                     onClick={() => {
                       handlePickedTeam(team._id, team.name)

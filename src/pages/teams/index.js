@@ -17,12 +17,7 @@ export default function Groups({ userId }) {
 
   return (
     <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' } }}>
-      <AsideNavBar
-        teams={isSuccess ? data.data : null}
-        error={isError ? error : null}
-        isLoading={isLoading}
-        userId={userId}
-      />
+      <AsideNavBar teams={isSuccess ? data.data : null} isLoading={isLoading} userId={userId} />
       <Box
         sx={{
           width: '100%',

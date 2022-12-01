@@ -38,7 +38,6 @@ export const updateTeamName = (id, data) => {
 }
 
 export const updateUserRole = data => {
-  console.log({ teamId: data.teamId, userId: data.userId })
   return api
     .put(`/api/v1/teams/${data.teamId}/user/${data.userId}`)
     .then(res => res.data)
@@ -50,3 +49,24 @@ export const deleteTeam = id =>
     .delete(`/api/v1/teams/${id}`)
     .then(res => res.data)
     .catch(err => err)
+
+export const RemoveUserFromTeam = data => {
+  return api
+    .delete(`/api/v1/teams/${data.teamId}/user/${data.userId}`)
+    .then(res => res.data)
+    .catch(err => err)
+}
+
+export const AcceptUserDemand = data => {
+  console.log(data)
+  return api
+    .post(`/api/v1/teams/${data.teamId}/user/${data.userId}/confirmed`)
+    .then(res => res.data)
+    .catch(err => err)
+}
+export const RejectUserDemand = data => {
+  return api
+    .post(`/api/v1/teams/${data.teamId}/user/${data.userId}/rejected`)
+    .then(res => res.data)
+    .catch(err => err)
+}
