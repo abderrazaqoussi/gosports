@@ -4,7 +4,7 @@ import { useState } from 'react'
 // ** import from MUI
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
-// import addSeanceForm from './addSeanceForm'
+import AddClass from './AddClass'
 
 export default function Index() {
   // set Hooks
@@ -48,16 +48,7 @@ export default function Index() {
         </Box>
       ) : (
         <Box sx={style.containerStyle}>
-          <Button
-            sx={{ width: '100%' }}
-            onClick={() => {
-              setIsOpen(false)
-            }}
-            variant='contained'
-          >
-            Back
-          </Button>
-          <Box>{/* <addSeanceForm /> */}</Box>
+          <AddClass setIsOpen={setIsOpen} />
         </Box>
       )}
     </>

@@ -52,24 +52,23 @@ export default function SignIn({ providers }) {
             <Typography sx={{ textAlign: 'center' }}>Let's get started</Typography>
           </Main>
           <Footer sx={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            {/* <Button
-              // onClick={() => signIn(provider.id)}
-              startIcon={<StravaIcon />}
-              fullWidth
-              sx={{
-                maxWidth: '280px',
-                background: '#fc4c01',
-                color: '#ffffff',
-                '& svg': { fill: '#fff' },
-                '&:hover': { background: '#fc4c01', color: '#ffffff', opacity: 0.8 }
-              }}
-            >
-              {`Continue with Strava`}
-            </Button> */}
-
+            <a href={`${process.env.NEXT_PUBLIC_SERVER_URL}/auth/strava`}>
+              <Button
+                startIcon={<StravaIcon />}
+                fullWidth
+                sx={{
+                  maxWidth: '280px',
+                  background: '#fc4c01',
+                  color: '#ffffff',
+                  '& svg': { fill: '#fff' },
+                  '&:hover': { background: '#fc4c01', color: '#ffffff', opacity: 0.8 }
+                }}
+              >
+                {`Continue with Strava`}
+              </Button>
+            </a>
             <a href={`${process.env.NEXT_PUBLIC_SERVER_URL}/auth/google`}>
               <Button
-                // onClick={() => signIn(provider.id)}
                 startIcon={<GoogleIcon />}
                 fullWidth
                 sx={{

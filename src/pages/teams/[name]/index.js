@@ -48,7 +48,7 @@ export default function index({ userId, teamId }) {
 
   return (
     <Box sx={style.containerStyle}>
-      <TeamsAsideBar teams={isSuccess ? data.data : null} activeTeam={teamId} isLoading={isLoading} />
+      <TeamsAsideBar teams={isSuccess ? data.data : null} activeTeam={teamId} />
       {isSuccess ? (
         <Box sx={style.sectionStyle}>
           <Aside team={thisTeam} />
