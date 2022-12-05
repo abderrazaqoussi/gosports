@@ -14,6 +14,7 @@ export default function Index({ team }) {
   const style = {
     containerStyle: {
       width: '100%',
+      maxWidth: { xs: '100%', md: '350px', lg: '400px' },
       padding: '.75rem 1rem',
       display: 'flex',
       flexDirection: 'column',

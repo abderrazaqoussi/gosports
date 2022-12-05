@@ -28,10 +28,10 @@ export default function WRCSForm({ classData, setClassData }) {
                 display: 'flex',
                 flexDirection: 'column',
                 gap: '10px',
-                marginTop: '.5rem',
+                marginBlock: '.5rem',
                 border: '1px solid #edf2f4',
                 borderRadius: '10px',
-                padding: '.5rem'
+                padding: '.75rem'
               }}
             >
               <header
@@ -120,7 +120,7 @@ export default function WRCSForm({ classData, setClassData }) {
                       .find(a => a.id == task.id)
                       .steps.map(step => {
                         return (
-                          <div key={`${task.id}${step.id}`}>
+                          <div key={`${task.id}${step.id}`} style={{ width: '100%', padding: '1rem' }}>
                             <header
                               className='Step_Header'
                               style={{
@@ -130,7 +130,7 @@ export default function WRCSForm({ classData, setClassData }) {
                                 justifyContent: 'space-between'
                               }}
                             >
-                              <h3>{`Task ${newTaskArr.find(a => a.id == task.id).steps.indexOf(step) + 1}`}</h3>
+                              <h4>{`Step ${newTaskArr.find(a => a.id == task.id).steps.indexOf(step) + 1}`}</h4>
                               <Button
                                 aria-label='settings'
                                 onClick={() => {
@@ -149,7 +149,7 @@ export default function WRCSForm({ classData, setClassData }) {
                               </Button>
                             </header>
 
-                            <main>
+                            <main style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: '10px' }}>
                               <Box sx={{ width: '100%' }}>
                                 <FormControl fullWidth>
                                   <InputLabel id={'StepType'} variant='standard'>
