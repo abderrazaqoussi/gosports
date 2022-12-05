@@ -77,3 +77,10 @@ export const RejectUserDemand = data => {
     .then(res => res.data)
     .catch(err => err)
 }
+
+export const RecordedClasses = id => {
+  return api
+    .get(`/api/v1/classes/recorded/${id}`)
+    .then(res => res.data)
+    .catch(err => err)
+}

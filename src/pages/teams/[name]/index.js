@@ -9,8 +9,11 @@ import Box from '@mui/material/Box'
 const Aside = dynamic(() => import('src/views/teams/Team/Aside'), {
   ssr: false
 })
+const Main = dynamic(() => import('src/views/teams/Team/Main'), {
+  ssr: false
+})
 import TeamsAsideBar from 'src/views/teams/TeamsAsideBar'
-import Main from 'src/views/teams/Team/Main'
+// import Main from 'src/views/teams/Team/Main'
 
 // **
 import { useQuery } from 'react-query'
@@ -49,7 +52,7 @@ export default function index({ userId, teamId }) {
   return (
     <Box sx={style.containerStyle}>
       <TeamsAsideBar teams={isSuccess ? data.data : null} activeTeam={teamId} />
-      {isSuccess ? (
+      {isSuccess && thisTeam ? (
         <Box sx={style.sectionStyle}>
           <Aside team={thisTeam} />
           <Box sx={{ display: { xs: 'none', md: 'flex' }, width: '100%' }}>

@@ -3,12 +3,11 @@ import { useState } from 'react'
 
 // ** import from MUI
 import Box from '@mui/material/Box'
-import Button from '@mui/material/Button'
 import AddClass from './AddClass'
+import PlannedClasses from './PlannedClasses'
 
-export default function Index() {
+export default function Index({ team }) {
   // set Hooks
-
   const [isOpen, setIsOpen] = useState(false)
 
   // set Styles
@@ -35,20 +34,11 @@ export default function Index() {
     <>
       {!isOpen ? (
         <Box sx={style.containerStyle}>
-          <Button
-            sx={{ width: '100%' }}
-            onClick={() => {
-              setIsOpen(true)
-            }}
-            variant='contained'
-          >
-            Add Class
-          </Button>
-          <Box className='Model'>{'Planned Classes Here'}</Box>
+          <PlannedClasses setIsOpen={setIsOpen} />
         </Box>
       ) : (
         <Box sx={style.containerStyle}>
-          <AddClass setIsOpen={setIsOpen} />
+          <AddClass setIsOpen={setIsOpen} members={team.members} />
         </Box>
       )}
     </>

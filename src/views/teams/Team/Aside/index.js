@@ -18,7 +18,6 @@ import { useTheme } from '@mui/material'
 import useMediaQuery from '@mui/material/useMediaQuery'
 
 export default function Index({ team }) {
-  console.log({ true: true, team })
   const theme = useTheme()
   const mediumScreen = useMediaQuery(theme => theme.breakpoints.down('md'))
   // set logic
@@ -41,7 +40,7 @@ export default function Index({ team }) {
       {mediumScreen ? (
         <TabsWrapper
           pages={{
-            Feed: <Main />,
+            Feed: <Main team={team} />,
             Classes: <Classes team={team} />,
             Members: <Members team={team} />,
             Settings: <Settings team={team} />

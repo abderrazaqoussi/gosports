@@ -3,6 +3,8 @@ import { useState } from 'react'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 
+import Avatar from '@mui/material/Avatar'
+
 import Grid from '@mui/material/Grid'
 import FormControl from '@mui/material/FormControl'
 import TextField from '@mui/material/TextField'
@@ -16,7 +18,22 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker'
 import { MobileTimePicker } from '@mui/x-date-pickers/MobileTimePicker'
 
-export default function index({ setIsOpen }) {
+import { getUserById, updateUserRole } from 'src/utils/api/apisConfig'
+import { useQueries, useMutation } from 'react-query'
+
+import WRCSForm from './WRCSForm'
+import useNewId from 'src/utils/hooks/useNewId'
+
+export default function index({ setIsOpen, members }) {
+  const { randomId } = useNewId()
+  const usersData = useQueries(
+    members.map(user => {
+      return {
+        queryKey: ['user', user.id],
+        queryFn: () => getUserById(user.id)
+      }
+    })
+  )
   const initialClassData = {
     title: '',
     sport: '',
@@ -28,28 +45,31 @@ export default function index({ setIsOpen }) {
 
   const [classData, setClassData] = useState(initialClassData)
   const [athletes, setAthletes] = useState([])
-  const athletesList = ['Ali', 'Omar', 'Mohamed', 'Pop']
 
   const handleChange = event => {
     const value = event.target.value
+    console.log(value)
 
     if (value[value.length - 1] === 'all') {
       setAthletes(athletes.length === athletesList.length ? [] : athletesList)
 
       return
     }
-    setSeanceData({ ...seanceData, athletes: value })
+    setClassData({ ...classData, athletes: value })
   }
 
   function handleData(e) {
     e.preventDefault()
     console.log(classData)
   }
+  const style = {
+    buttonStyle: { width: '100%' }
+  }
 
   return (
     <>
       <Button
-        sx={{ width: '100%' }}
+        sx={style.buttonStyle}
         onClick={() => {
           setIsOpen(false)
         }}
@@ -58,10 +78,9 @@ export default function index({ setIsOpen }) {
         Back
       </Button>
       <form onSubmit={handleData}>
-        <Box>
-          {' '}
+        <Box sx={{ padding: '.5rem .25rem' }}>
           <Grid container spacing={6}>
-            <Grid item xs={12} sm={6}>
+            <Grid item xs={12}>
               <TextField
                 required
                 id='outlined-search'
@@ -75,7 +94,7 @@ export default function index({ setIsOpen }) {
                 }}
               />
             </Grid>
-            <Grid item xs={12} sm={6}>
+            <Grid item xs={12}>
               <FormControl fullWidth>
                 <InputLabel id={'Sport'} variant='standard'>
                   Sport
@@ -100,7 +119,7 @@ export default function index({ setIsOpen }) {
                 </Select>
               </FormControl>
             </Grid>
-            <Grid item xs={12} sm={6}>
+            <Grid item xs={12}>
               <LocalizationProvider dateAdapter={AdapterDateFns}>
                 <MobileDatePicker
                   label='Start Date'
@@ -113,7 +132,7 @@ export default function index({ setIsOpen }) {
                 />
               </LocalizationProvider>
             </Grid>
-            <Grid item xs={12} sm={6}>
+            <Grid item xs={12}>
               <LocalizationProvider dateAdapter={AdapterDateFns}>
                 <MobileTimePicker
                   label='Start Time'
@@ -128,7 +147,7 @@ export default function index({ setIsOpen }) {
                 />
               </LocalizationProvider>
             </Grid>
-            <Grid item xs={12} sm={6}>
+            {/* <Grid item xs={12}>
               <FormControl fullWidth>
                 <InputLabel id='selectMultipleAthlete' variant='standard'>
                   Athlete
@@ -144,17 +163,39 @@ export default function index({ setIsOpen }) {
                   onChange={handleChange}
                   renderValue={athletes => athletes.join(', ')}
                 >
-                  {athletesList.map(e => {
-                    return (
-                      <MenuItem key={athletesList.indexOf(e)} value={e}>
-                        {e}
-                      </MenuItem>
-                    )
+                  {usersData.map(userData => {
+                    if (userData.isSuccess) {
+                      return (
+                        <MenuItem
+                          key={usersData.indexOf(userData)}
+                          value={{ name: userData.data.data.name, id: userData.data.data._id }}
+                          sx={{ display: 'flex', gap: '10px' }}
+                        >
+                          <Avatar
+                            src={userData.data.data.image}
+                            alt='Remy Sharp'
+                            referrerPolicy='no-referrer'
+                            sx={{ maxWidth: '20px', maxHeight: '20px' }}
+                          />
+                          <div
+                            style={{
+                              display: 'grid',
+                              placeItems: 'center',
+                              maxWidth: '60%',
+                              textOverflow: 'ellipsis',
+                              whiteSpace: 'nowrap'
+                            }}
+                          >
+                            {userData.data.data.name}
+                          </div>
+                        </MenuItem>
+                      )
+                    }
                   })}
                 </Select>
               </FormControl>
-            </Grid>
-            <Grid item xs={12} sm={6}>
+            </Grid> */}
+            <Grid item xs={12}>
               <TextField
                 id='standard-multiline-static'
                 label='Description'
@@ -171,10 +212,44 @@ export default function index({ setIsOpen }) {
             </Grid>
           </Grid>
         </Box>
-        <Box></Box>
-        <Button size='large' type='submit' sx={{ mr: 2 }} variant='contained'>
-          Submit
-        </Button>
+
+        <WRCSForm classData={classData} setClassData={setClassData} />
+        <div
+          style={{
+            width: '100%',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '10px'
+          }}
+        >
+          <Button
+            onClick={() => {
+              const newTasks = [
+                ...classData.tasks,
+                {
+                  id: randomId,
+                  taskName: '',
+                  purpose: '',
+                  repeat: 0,
+                  steps: []
+                }
+              ]
+
+              //
+              setClassData({
+                ...classData,
+                tasks: newTasks
+              })
+            }}
+            sx={style.buttonStyle}
+            variant='contained'
+          >
+            Add Task
+          </Button>
+          <Button type='submit' sx={style.buttonStyle} variant='contained'>
+            Submit
+          </Button>
+        </div>
       </form>
     </>
   )
