@@ -39,7 +39,7 @@ export default function Index({ team }) {
         </Box>
       ) : (
         <Box sx={style.containerStyle}>
-          <AddClass setIsOpen={setIsOpen} members={team.members} />
+          <AddClass setIsOpen={setIsOpen} members={team.members} teamId={team._id} />
         </Box>
       )}
     </>

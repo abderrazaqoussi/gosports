@@ -78,9 +78,17 @@ export const RejectUserDemand = data => {
     .catch(err => err)
 }
 
-export const RecordedClasses = id => {
+export const RecordedSessions = id => {
   return api
-    .get(`/api/v1/classes/recorded/${id}`)
+    .get(`/api/v1/sessions/recorded/${id}`)
+    .then(res => res.data)
+    .catch(err => err)
+}
+
+export const addSession = sessionData => {
+  console.log({ sessionData })
+  return api
+    .post('/api/v1/sessions/planned/', sessionData)
     .then(res => res.data)
     .catch(err => err)
 }

@@ -20,12 +20,13 @@ import { MobileTimePicker } from '@mui/x-date-pickers/MobileTimePicker'
 // ** import Utiles
 import removeAllDuplicatedObjects from 'src/utils/arrays/removeAllDuplicatedObjects'
 import useNewId from 'src/utils/hooks/useNewId'
-import { getUserById, updateUserRole } from 'src/utils/api/apisConfig'
+import { getUserById, addSession } from 'src/utils/api/apisConfig'
 import { useQueries, useMutation } from 'react-query'
+import useUserId from 'src/utils/hooks/useUserId'
 
 import WRCSForm from './WRCSForm'
 
-export default function index({ setIsOpen, members }) {
+export default function index({ setIsOpen, members, teamId }) {
   // Variables
   const initialClassData = {
     title: '',
@@ -37,6 +38,8 @@ export default function index({ setIsOpen, members }) {
   }
 
   // Hooks
+  const { data: userId } = useUserId()
+  const handlePostClass = useMutation(addSession)
   const [classData, setClassData] = useState(initialClassData)
   const [athletes, setAthletes] = useState([])
   const { randomId } = useNewId()
@@ -63,7 +66,10 @@ export default function index({ setIsOpen, members }) {
 
   function handleData(e) {
     e.preventDefault()
-    console.log(classData)
+    let teamData = new FormData()
+    teamData.append('name', name)
+    // console.log({ teamId: `${teamId}`, createdBy: `${userId}`, ...classData })
+    handlePostClass.mutate(JSON.stringify({ teamId: `${teamId}`, createdBy: `${userId}`, ...classData }))
   }
 
   // Style

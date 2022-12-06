@@ -1,5 +1,5 @@
 import Box from '@mui/material/Box'
-import { RecordedClasses } from 'src/utils/api/apisConfig'
+import { RecordedSessions } from 'src/utils/api/apisConfig'
 import { useQueries } from 'react-query'
 import Card from './MapCard'
 
@@ -8,7 +8,7 @@ export default function Index({ team }) {
     team.members.map(user => {
       return {
         queryKey: ['classes', user.id],
-        queryFn: () => RecordedClasses(user.id)
+        queryFn: () => RecordedSessions(user.id)
       }
     })
   )
