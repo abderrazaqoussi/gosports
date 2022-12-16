@@ -35,7 +35,7 @@ export default function Index({ team }) {
     <>
       {!isOpen ? (
         <Box sx={style.containerStyle}>
-          <PlannedClasses setIsOpen={setIsOpen} />
+          <PlannedClasses setIsOpen={setIsOpen} teamId={team._id} />
         </Box>
       ) : (
         <Box sx={style.containerStyle}>

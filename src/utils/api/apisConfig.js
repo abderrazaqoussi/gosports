@@ -78,17 +78,30 @@ export const RejectUserDemand = data => {
     .catch(err => err)
 }
 
-export const RecordedSessions = id => {
+export const getRecordedWorkouts = id => {
   return api
-    .get(`/api/v1/sessions/recorded/${id}`)
+    .get(`/api/v1/workouts/recorded/${id}`)
     .then(res => res.data)
     .catch(err => err)
 }
 
-export const addSession = sessionData => {
-  console.log({ sessionData })
+export const addWorkout = workoutData => {
   return api
-    .post('/api/v1/sessions/planned/', sessionData)
+    .post('/api/v1/workouts/planned/', workoutData, {
+      headers: {
+        'Content-Type': 'application/json'
+        // 'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: JSON.stringify(workoutData) // body data type must match "Content-Type" header
+    })
+    .then(res => res.data)
+    .catch(err => err)
+}
+
+export const teamWorkoutsByUserId = (teamId, userId) => {
+  console.log({ teamId, userId })
+  return api
+    .get(`/api/v1/workouts/planned/teams/${teamId}/users/${userId}`)
     .then(res => res.data)
     .catch(err => err)
 }

@@ -20,7 +20,7 @@ import { MobileTimePicker } from '@mui/x-date-pickers/MobileTimePicker'
 // ** import Utiles
 import removeAllDuplicatedObjects from 'src/utils/arrays/removeAllDuplicatedObjects'
 import useNewId from 'src/utils/hooks/useNewId'
-import { getUserById, addSession } from 'src/utils/api/apisConfig'
+import { getUserById, addWorkout } from 'src/utils/api/apisConfig'
 import { useQueries, useMutation } from 'react-query'
 import useUserId from 'src/utils/hooks/useUserId'
 
@@ -39,7 +39,15 @@ export default function index({ setIsOpen, members, teamId }) {
 
   // Hooks
   const { data: userId } = useUserId()
-  const handlePostClass = useMutation(addSession)
+  const handlePostWorkout = useMutation(addWorkout, {
+    onError: (error, variables, context) => {
+      // An error happened!
+      console.log(`rolling back optimistic update with id ${context.id}`)
+    },
+    onSuccess: (data, variables, context) => {
+      setIsOpen(false)
+    }
+  })
   const [classData, setClassData] = useState(initialClassData)
   const [athletes, setAthletes] = useState([])
   const { randomId } = useNewId()
@@ -66,10 +74,9 @@ export default function index({ setIsOpen, members, teamId }) {
 
   function handleData(e) {
     e.preventDefault()
-    let teamData = new FormData()
-    teamData.append('name', name)
+
     // console.log({ teamId: `${teamId}`, createdBy: `${userId}`, ...classData })
-    handlePostClass.mutate(JSON.stringify({ teamId: `${teamId}`, createdBy: `${userId}`, ...classData }))
+    handlePostWorkout.mutate({ teamId: `${teamId}`, createdBy: `${userId}`, ...classData })
   }
 
   // Style
