@@ -22,7 +22,6 @@ export default function index({ imageSrc, teamName, membersNum }) {
       width: { xs: '100%', md: '150px' },
       minHeight: '100px',
       maxHeight: '240px',
-      position: 'relative',
       aspectRatio: '1 / 1',
       borderRadius: { xs: 0, md: '50%' },
       overflow: 'hidden',

@@ -29,7 +29,7 @@ export default function Index({ team }) {
       {pickData ? (
         <DetailsCard user={pickData?.user} activity={pickData?.activity} setPickData={setPickData} />
       ) : (
-        <Box sx={{ width: '100%', background: 'red' }}>
+        <Box sx={{ width: '60%', marginInline: 'auto', display: 'flex', flexDirection: 'column', gap: '10px' }}>
           {data
             ? data.data.map(sing => {
                 return sing.activities.map(activity => {

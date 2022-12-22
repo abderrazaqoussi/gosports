@@ -7,7 +7,7 @@ import Avatar from '@mui/material/Avatar'
 import Map from './Map'
 import Stat from './Stat'
 
-export default function InfoCard({ user, activity }) {
+export default function InfoCard({ user, activity, setPickData }) {
   const avatarStyle = {
     position: 'absolute',
     top: 0,
@@ -22,6 +22,15 @@ export default function InfoCard({ user, activity }) {
 
   return (
     <Box sx={{ width: '100%' }}>
+      <Box>
+        <Button
+          onClick={() => {
+            setPickData(null)
+          }}
+        >
+          Back
+        </Button>
+      </Box>
       <Box sx={{ height: '250px' }}>
         <Map data={activity} />
       </Box>
