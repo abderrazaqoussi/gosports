@@ -1,18 +1,20 @@
+import { useState } from 'react'
 import Box from '@mui/material/Box'
-import { getRecordedWorkouts } from 'src/utils/api/apisConfig'
-import { useQueries } from 'react-query'
-import Card from './MapCard'
+import { teamRecordedWorkouts } from 'src/utils/api/apisConfig'
+import { useQuery } from 'react-query'
+import Card from './MinimalCard'
+import DetailsCard from './DetailsCard'
+import MinimalCard from './MinimalCard'
 
 export default function Index({ team }) {
-  const handleMembersRecordedClasses = useQueries(
-    team.members.map(user => {
-      return {
-        queryKey: ['classes', user.id],
-        queryFn: () => getRecordedWorkouts(user.id)
-      }
-    })
-  )
-  console.log({ team, from: 'main' })
+  const [pickData, setPickData] = useState(null)
+  const { data, error, status } = useQuery(['Recorded Workouts', `${team._id}`], () => {
+    return teamRecordedWorkouts(team._id)
+  })
+  if (data) {
+    console.log(data.data[0].user, data.data[0].activities[0])
+  }
+
   return (
     <Box
       sx={{
@@ -24,22 +26,19 @@ export default function Index({ team }) {
         gap: '15px'
       }}
     >
-      {handleMembersRecordedClasses.map(userClassesData => {
-        if (userClassesData.isSuccess) {
-          return userClassesData?.data?.data?.map(activity => {
-            return (
-              <Box
-                key={`${handleMembersRecordedClasses.indexOf(userClassesData)}${userClassesData.data.data.indexOf(
-                  activity
-                )}`}
-                sx={{ width: '100%', maxWidth: '400px', background: '#fff' }}
-              >
-                <Card mapData={activity} />
-              </Box>
-            )
-          })
-        }
-      })}
+      {pickData ? (
+        <DetailsCard user={pickData?.user} activity={pickData?.activity} setPickData={setPickData} />
+      ) : (
+        <Box sx={{ width: '100%', background: 'red' }}>
+          {data
+            ? data.data.map(sing => {
+                return sing.activities.map(activity => {
+                  return <MinimalCard user={sing.user} activity={activity} setPickData={setPickData} />
+                })
+              })
+            : null}
+        </Box>
+      )}
     </Box>
   )
 }

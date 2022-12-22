@@ -98,10 +98,18 @@ export const addWorkout = workoutData => {
     .catch(err => err)
 }
 
-export const teamWorkoutsByUserId = (teamId, userId) => {
+export const teamPlannedWorkoutsByUserId = (teamId, userId) => {
   console.log({ teamId, userId })
   return api
     .get(`/api/v1/workouts/planned/teams/${teamId}/users/${userId}`)
+    .then(res => res.data)
+    .catch(err => err)
+}
+
+export const teamRecordedWorkouts = id => {
+  console.log({ id })
+  return api
+    .get(`/api/v1/workouts/recorded/teams/${id}`)
     .then(res => res.data)
     .catch(err => err)
 }
